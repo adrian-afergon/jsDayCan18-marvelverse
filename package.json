@@ -29,7 +29,7 @@
     "test:watch": "jest --watch",
     "server": "node_modules/.bin/nodemon build/src/index.js",
     "server:watch": "npm run build:watch && npm run server",
-    "start": "node /build/src/index.js"
+    "start": "node build/src/index.js"
   },
   "author": "Adrián Ferrera González",
   "license": "ISC",
