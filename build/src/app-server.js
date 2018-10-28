@@ -23,12 +23,21 @@ class AppServer {
     sockets() {
         this.io = SocketIo(this.server);
     }
+    getNumberOfClients() {
+        const clients = this.io.clients();
+        const connectedClientIds = Object.keys(clients.connected);
+        return connectedClientIds.length;
+    }
+    notifyPopulation() {
+        this.io.sockets.emit('population', this.getNumberOfClients());
+    }
     listen() {
         this.server.listen(this.port, () => {
             console.log('Running server on port %s', this.port);
         });
         this.io.on('connect', (socket) => {
             console.log('Connected client on port %s.', this.port);
+            this.notifyPopulation();
             socket.on('disconnect', () => {
                 console.log('Client disconnected');
             });
@@ -41,6 +50,7 @@ class AppServer {
                         clients.connected[id].disconnect(true);
                     }
                 });
+                this.notifyPopulation();
             });
         });
     }

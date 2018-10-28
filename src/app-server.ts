@@ -33,6 +33,16 @@ export class AppServer {
         this.io = SocketIo(this.server);
     }
 
+    private getNumberOfClients() {
+        const clients = this.io.clients();
+        const connectedClientIds = Object.keys(clients.connected);
+        return connectedClientIds.length;
+    }
+
+    private notifyPopulation () {
+        this.io.sockets.emit('population', this.getNumberOfClients());
+    }
+
     private listen(): void {
         this.server.listen(this.port, () => {
             console.log('Running server on port %s', this.port);
@@ -40,6 +50,7 @@ export class AppServer {
 
         this.io.on('connect', (socket: any) => {
             console.log('Connected client on port %s.', this.port);
+            this.notifyPopulation();
 
             socket.on('disconnect', () => {
                 console.log('Client disconnected');
@@ -54,6 +65,7 @@ export class AppServer {
                         clients.connected[id].disconnect(true);
                     }
                 });
+                this.notifyPopulation();
             });
         });
     }
