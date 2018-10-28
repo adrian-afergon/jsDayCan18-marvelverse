@@ -28,7 +28,8 @@
     "test": "jest --coverage",
     "test:watch": "jest --watch",
     "server": "node_modules/.bin/nodemon build/src/index.js",
-    "server:watch": "npm run build:watch && npm run server"
+    "server:watch": "npm run build:watch && npm run server",
+    "start": "npm run build && \"node /src/build/index.js\""
   },
   "author": "Adrián Ferrera González",
   "license": "ISC",
