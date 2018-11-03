@@ -9,7 +9,7 @@ class AppServer {
     constructor() {
         this.createApp();
         this.config();
-        this.cors();
+        this.setRoutes();
         this.createServer();
         this.sockets();
         this.listen();
@@ -26,11 +26,12 @@ class AppServer {
     sockets() {
         this.io = SocketIo(this.server);
     }
-    cors() {
+    setRoutes() {
         const options = {
             allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "X-Access-Token"],
             credentials: true,
             methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
+            origin: true,
             preflightContinue: false
         };
         this.app.use(cors(options));

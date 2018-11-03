@@ -14,7 +14,7 @@ export class AppServer {
     constructor() {
         this.createApp();
         this.config();
-        this.cors();
+        this.setRoutes();
         this.createServer();
         this.sockets();
         this.listen();
@@ -37,12 +37,12 @@ export class AppServer {
         this.io = SocketIo(this.server);
     }
 
-    private cors(): void {
+    private setRoutes(): void {
         const options:cors.CorsOptions = {
             allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "X-Access-Token"],
             credentials: true,
             methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
-            // origin: API_URL,
+            origin: true,
             preflightContinue: false
         };
         this.app.use(cors(options));
