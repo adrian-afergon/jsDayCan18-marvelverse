@@ -1,6 +1,7 @@
 import { createServer, Server } from 'http';
 import * as express from 'express';
 import * as SocketIo from 'socket.io';
+import * as cors from 'cors';
 import {AppRoutes} from "./app.routes";
 
 export class AppServer {
@@ -13,6 +14,7 @@ export class AppServer {
     constructor() {
         this.createApp();
         this.config();
+        this.cors();
         this.createServer();
         this.sockets();
         this.listen();
@@ -33,6 +35,19 @@ export class AppServer {
 
     private sockets(): void {
         this.io = SocketIo(this.server);
+    }
+
+    private cors(): void {
+        const router = express.Router();
+        const options:cors.CorsOptions = {
+            allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "X-Access-Token"],
+            credentials: true,
+            methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
+            // origin: API_URL,
+            preflightContinue: false
+        };
+        router.use(cors(options));
+        router.options("*", cors(options));
     }
 
     private getNumberOfClients() {

@@ -3,11 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const http_1 = require("http");
 const express = require("express");
 const SocketIo = require("socket.io");
+const cors = require("cors");
 const app_routes_1 = require("./app.routes");
 class AppServer {
     constructor() {
         this.createApp();
         this.config();
+        this.cors();
         this.createServer();
         this.sockets();
         this.listen();
@@ -24,6 +26,17 @@ class AppServer {
     }
     sockets() {
         this.io = SocketIo(this.server);
+    }
+    cors() {
+        const options = {
+            allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "X-Access-Token"],
+            credentials: true,
+            methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
+            preflightContinue: false
+        };
+        this.app.use(cors(options));
+        this.app.options("*", cors(options));
+
     }
     getNumberOfClients() {
         const clients = this.io.clients();
