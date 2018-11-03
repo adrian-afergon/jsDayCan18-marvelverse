@@ -1,6 +1,7 @@
 import { createServer, Server } from 'http';
 import * as express from 'express';
 import * as SocketIo from 'socket.io';
+import {AppRoutes} from "./app.routes";
 
 export class AppServer {
     public static readonly PORT:number = 8080;
@@ -19,6 +20,7 @@ export class AppServer {
 
     private createApp(): void {
         this.app = express();
+        AppRoutes.instanceRoutes(this.app);
     }
 
     private createServer(): void {
@@ -61,7 +63,7 @@ export class AppServer {
                 const connectedClientIds = Object.keys(clients.connected);
                 connectedClientIds.forEach((id) => {
                     console.log('id:', id, connectedClientIds.indexOf(id) % 2 === 0);
-                    if(connectedClientIds.indexOf(id) % 2 === 0) {
+                    if(connectedClientIds.indexOf(id) % 2 === 1) {
                         clients.connected[id].disconnect(true);
                     }
                 });
