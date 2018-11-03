@@ -16,7 +16,6 @@ class AppServer {
     }
     createApp() {
         this.app = express();
-        app_routes_1.AppRoutes.instanceRoutes(this.app);
     }
     createServer() {
         this.server = http_1.createServer(this.app);
@@ -35,8 +34,8 @@ class AppServer {
             preflightContinue: false
         };
         this.app.use(cors(options));
+        app_routes_1.AppRoutes.instanceRoutes(this.app);
         this.app.options("*", cors(options));
-
     }
     getNumberOfClients() {
         const clients = this.io.clients();

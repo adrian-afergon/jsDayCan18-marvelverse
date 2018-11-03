@@ -22,7 +22,7 @@ export class AppServer {
 
     private createApp(): void {
         this.app = express();
-        AppRoutes.instanceRoutes(this.app);
+        // AppRoutes.instanceRoutes(this.app);
     }
 
     private createServer(): void {
@@ -38,7 +38,6 @@ export class AppServer {
     }
 
     private cors(): void {
-        const router = express.Router();
         const options:cors.CorsOptions = {
             allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "X-Access-Token"],
             credentials: true,
@@ -46,8 +45,9 @@ export class AppServer {
             // origin: API_URL,
             preflightContinue: false
         };
-        router.use(cors(options));
-        router.options("*", cors(options));
+        this.app.use(cors(options));
+        AppRoutes.instanceRoutes(this.app);
+        this.app.options("*", cors(options));
     }
 
     private getNumberOfClients() {
